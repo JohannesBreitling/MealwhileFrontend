@@ -1,6 +1,15 @@
 <template>
     <main>
-        <v-dialog width="500">
+
+        <h1>Einheiten</h1>
+
+
+
+        <v-dialog
+            width="500"
+            persistent
+            v-model="dialog"
+        >
             <template v-slot:activator="{ props }">
                 <v-btn v-bind="props">Neue Einheit erstellen</v-btn>
             </template>
@@ -9,19 +18,16 @@
                 <v-card title="Neue Einheit erstellen">
                 <v-form>
                     <v-container>
-                        <v-text-field
-                            label="Name der Einheit (z. B. Gramm)"
-                            hide-details
-                        ></v-text-field>
-                        <v-text-field
-                            label="Abkürzung (z. B. g)"
-                            hide-details
-                        ></v-text-field>
-                        <v-btn>Erstellen</v-btn><br>
-                        <v-btn
-                            text="abbrechen"
-                            @click="isActive.value = false"
-                        ></v-btn>
+                        <MWTextField text="Name der Einheit (z. B. Gramm)"></MWTextField>
+                        <MWTextField class="mt-3" text="Abkürzung (z. B. g)"></MWTextField>
+                        <MWButton class="mt-3" type="primary" text="Erstellen" block="true"></MWButton>
+                        <MWButton
+                            class="mt-1"
+                            type="secondary"
+                            @click="(isActive.value = false)"
+                            text="Abbrechen"
+                            block="true">
+                        </MWButton>
                     </v-container>
                 </v-form>
                 </v-card>
@@ -31,5 +37,9 @@
 </template>
 
 <script setup>
-import TheWelcome from '../components/TheWelcome.vue'
+import MWTextField from '../components/basic/MWTextfield.vue'
+import MWButton from '../components/basic/MWButton.vue'
+import { ref } from 'vue'
+
+const dialog = ref(false)
 </script>
