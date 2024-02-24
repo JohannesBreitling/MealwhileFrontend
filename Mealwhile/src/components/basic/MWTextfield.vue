@@ -1,12 +1,7 @@
 <template>
-    <div>
-        <v-text-field
-            name="name"
-            variant="outlined"
-            :label="props.text"
-            hide-details
-        ></v-text-field>
-    </div>
+  <div>
+    <v-text-field name="name" variant="outlined" :label="props.text" hide-details></v-text-field>
+  </div>
 </template>
 
 <script setup>
@@ -18,6 +13,4 @@ const props = defineProps({
 })
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
