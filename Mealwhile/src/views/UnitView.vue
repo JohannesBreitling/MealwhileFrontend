@@ -7,13 +7,18 @@
       <v-dialog width="500" persistent v-model="state.dialogActive">
         
           <v-card title="Neue Einheit erstellen">
-            <v-form>
+            <v-form @submit.prevent>
               <v-container>
-                <MWTextField text="Name der Einheit (z. B. Gramm)"></MWTextField>
-                <MWTextField class="mt-3" text="Abkürzung (z. B. g)"></MWTextField>
-                <MWButton class="mt-3" type="primary" text="Erstellen" block="true"></MWButton>
+                <MWTextField :rules="[unitNameRule]" @update="(v) => createUnitState.name = v" text="Name der Einheit (z. B. Gramm)"></MWTextField>
+                <MWTextField @update="(v) => createUnitState.abbreviation = v" class="mt-3" text="Abkürzung (z. B. g)"></MWTextField>
+                <MWButton
+                  class="mt-3"
+                  type="primary"
+                  @click="createUnit()"
+                  text="Erstellen" block="true"></MWButton>
                 <MWButton
                   @click="state.dialogActive = false"
+                  submit="true"
                   class="mt-1"
                   type="secondary"
                   text="Abbrechen"
@@ -25,16 +30,14 @@
       </v-dialog>
 
       <div class="mt-5">
-          <v-card class="mb-3" variant="outlined" v-for="unit in state.units" :key="unit.id">
-            <v-card-title>Gramm (g)</v-card-title>
-            <v-card-actions>
-              <v-btn icon="mdi-pencil"></v-btn>
-              <v-btn icon="mdi-delete"></v-btn>
-            </v-card-actions>
-          </v-card>
+          <div v-if="state.unitsLoading">
+            <v-skeleton-loader class="mb-5 entity-card-loader" type="heading, text, actions"></v-skeleton-loader>
+          </div>
+
+          <div v-if="!state.unitsLoading">
+            <MWEntityCard class="mb-3" v-for="unit in state.units" v-bind:key="unit.Id" :id="unit.Id" :title="unit.Name + ' (' + unit.Abbreviation + ')'"></MWEntityCard>
+          </div>
       </div>
-
-
     </div>
   </main>
 </template>
@@ -42,16 +45,39 @@
 <script setup>
 import MWTextField from '../components/basic/MWTextfield.vue'
 import MWButton from '../components/basic/MWButton.vue'
+import MWEntityCard from '../components/basic/cards/MWEntityCard.vue'
 import { reactive } from 'vue'
 import { apiCaller } from '../assets/js/api/ApiCaller'
 
-apiCaller.get('unit/').then((value) => {
-  state.units = value
-})
-
 const state = reactive({
   dialogActive: false,
-  units: []
+  units: [],
+  unitsLoading: false,
 })
+
+const unitNameRule = (s) => {
+  if (!s) return 'Gib einen Namen für die Einheit ein!'
+
+  return true
+}
+
+state.unitsLoading = true
+  apiCaller.get('unit/').then((value) => {
+  state.units = value
+  state.unitsLoading = false
+})
+
+let createUnitState = reactive({
+  name: "",
+  abbreviation: ""
+})
+
+const createUnit = () => {
+  console.log(createUnitState.name, createUnitState.abbreviation)
+}
+
+// apiCaller.post('unit/', {"name": "Gramm", "abbreviation": "g"})
+
+
 
 </script>

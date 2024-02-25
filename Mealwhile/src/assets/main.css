@@ -16,3 +16,9 @@
   padding-top: 36px;
   width: 80%;
 }
+
+.entity-card-loader {
+  max-width: 500px;
+  border-radius: 8px !important;
+  border: 1.2px solid #7e7e7e;
+}

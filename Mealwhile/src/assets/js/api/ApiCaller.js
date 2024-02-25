@@ -7,6 +7,7 @@ class ApiCaller {
     this.instance = axios.create({
       // baseUrl: "http://0.0.0.0:8080/api/v1/",
       baseURL: 'http://94.16.118.251:8080/api/v1/',
+      // TODO Falls polling verwendet werden soll, dann muss ein neuer caller rein...
       timeout: 5000
       // TODO headers für auth ??
     })
@@ -24,23 +25,42 @@ class ApiCaller {
       return error
     }
   }
+
+  async put(url, body) {
+    try {
+      let response = await this.instance.put(url)
+
+      if (response.status == 200) {
+        return response.data
+      }
+    } catch (error) {
+      return error
+    }
+  }
+
+  async post(url, body) {
+    try {
+      let response = await this.instance.post(url, body)
+
+      if (response.status == 200) {
+        return response.data
+      }
+    } catch (error) {
+      return error
+    }
+  }
+
+  async delete(url) {
+    try {
+      let response = await this.instance.delete(url)
+
+      if (response.status == 200) {
+        return response.data
+      }
+    } catch (error) {
+      return error
+    }
+  }
 }
 
 export const apiCaller = new ApiCaller()
-
-/*
-export const getUnits = async () => {
-    try {
-        let response = await this.instance.get("unit/")
-        
-        if (response.status == 200) {
-            console.log(response["data"])
-        }
-        
-        
-        console.log(response)
-    } catch (error) {
-        console.error(error)
-    }
-}
-*/

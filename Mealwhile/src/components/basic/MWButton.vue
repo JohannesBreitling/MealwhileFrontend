@@ -6,6 +6,7 @@
       :block="props.block"
       variant="tonal"
       @click="(e) => emit('click', e)"
+      :type="{submit : props.submit}"
       :text="props.text"
     ></v-btn>
   </div>
@@ -27,6 +28,10 @@ const props = defineProps({
     validator(value, props) {
       return ['primary', 'secondary'].includes(value)
     }
+  },
+  submit: {
+    type: Boolean,
+    default: false
   }
 })
 
